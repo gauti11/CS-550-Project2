@@ -1,0 +1,9 @@
+2. All 3 times. 
+Current_kernel_time: Kernel code can always retrieve a representation of the current time by looking at the value of jiffies, jiffies are the tick counter since system start up. Drivers can use the current value of jiffies to calculate time intervals across events (for example, to tell double-clicks from single-clicks in input device drivers or calculate timeouts). In short, looking at jiffies is almost always sufficient when you need to measure time intervals.The current_kernel_time value, though expressed in nanoseconds, has only clock-tick granularity
+
+gettimeofday(): It states that do_gettimeofday has "near microsecond resolution," because it asks the timing hardware what fraction of the current jiffy has already elapsed. The precision varies from one architecture to another, however, since it depends on the actual hardware mechanisms in use. do_gettimeofday consistently reports a later time but not later than the next timer tick.
+
+getnstime: getnstimeofday() has better precision and run faster than do_gettimeofday(), while current_kernel_time() apparantly doesn't have the precision to do a very good job.
+
+3. The module crashes and we have to restart the vm to resolve the issues after issuing the rmmod command.The init_module function calls module_register_chrdev to add the device driver to the kernel's character device driver table. It also returns the major number to be used for the driver. The cleanup_module function deregisters the device.  so if -ve no driver would be assigned and it crashes.
+
